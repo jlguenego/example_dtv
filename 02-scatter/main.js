@@ -63,7 +63,7 @@
             .attr("x", width)
             .attr("y", -6)
             .style("text-anchor", "end")
-            .text("Calories");
+            .text("M² Loi Carrez");
 
         // y-axis
         svg.append("g")
@@ -75,7 +75,7 @@
             .attr("y", 6)
             .attr("dy", ".71em")
             .style("text-anchor", "end")
-            .text("Protein (g)");
+            .text("Valeur foncière");
 
         // draw dots
         svg.selectAll(".dot")
