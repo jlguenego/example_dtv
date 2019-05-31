@@ -34,3 +34,7 @@ input {
     height: 20em;
     border: 1px solid black;
 } */
+
+.point {
+    fill: red;
+}
