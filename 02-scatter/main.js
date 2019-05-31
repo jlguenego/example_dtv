@@ -1,6 +1,6 @@
 (function () {
 
-    var margin = { top: 20, right: 20, bottom: 30, left: 40 },
+    var margin = { top: 20, right: 20, bottom: 30, left: 80 },
         width = 960 - margin.left - margin.right,
         height = 500 - margin.top - margin.bottom;
 
@@ -12,19 +12,22 @@
      */
 
     // setup x 
-    var xValue = function (d) { return d.Calories; }, // data -> value
+    var xValue = function (d) {
+        console.log('d', d);
+        return d.surface;
+    }, // data -> value
         xScale = d3.scale.linear().range([0, width]), // value -> display
         xMap = function (d) { return xScale(xValue(d)); }, // data -> display
         xAxis = d3.svg.axis().scale(xScale).orient("bottom");
 
     // setup y
-    var yValue = function (d) { return d["Protein (g)"]; }, // data -> value
+    var yValue = function (d) { return d.valeur_fonciere; }, // data -> value
         yScale = d3.scale.linear().range([height, 0]), // value -> display
         yMap = function (d) { return yScale(yValue(d)); }, // data -> display
         yAxis = d3.svg.axis().scale(yScale).orient("left");
 
     // setup fill color
-    var cValue = function (d) { return d.Manufacturer; },
+    var cValue = function (d) { return d.valeur_fonciere; },
         color = d3.scale.category10();
 
     // add the graph canvas to the body of the webpage
@@ -40,14 +43,18 @@
         .style("opacity", 0);
 
     // load data
-    d3.csv("77468_000AE.csv", function (error, data) {
-
+    console.log('read file');
+    const dsv = d3.dsv(";", "text/plain");
+    dsv("77468_000AE.csv", function (error, data) {
+        console.log(data);
         // change string (from CSV) into number format
+        data = data.filter(d => +d.lot1_surface_carrez > 0 && +d.valeur_fonciere > 1000);
         data.forEach(function (d) {
-            d.Calories = +d.Calories;
-            d["Protein (g)"] = +d["Protein (g)"];
-            //    console.log(d);
+            d.surface = +d.lot1_surface_carrez;
+            d.valeur_fonciere = +d.valeur_fonciere;
+            console.log(d);
         });
+        console.log(data);
 
         // don't want dots overlapping axis, so add in buffer to data domain
         xScale.domain([d3.min(data, xValue) - 1, d3.max(data, xValue) + 1]);
@@ -63,7 +70,7 @@
             .attr("x", width)
             .attr("y", -6)
             .style("text-anchor", "end")
-            .text("M² Loi Carrez");
+            .text("m² Loi Carrez");
 
         // y-axis
         svg.append("g")
@@ -90,7 +97,7 @@
                 tooltip.transition()
                     .duration(200)
                     .style("opacity", .9);
-                tooltip.html(d["Cereal Name"] + "<br/> (" + xValue(d)
+                tooltip.html(d.adresse_numero + ' ' + d.adresse_nom_voie + "<br/> (" + xValue(d)
                     + ", " + yValue(d) + ")")
                     .style("left", (d3.event.pageX + 5) + "px")
                     .style("top", (d3.event.pageY - 28) + "px");
