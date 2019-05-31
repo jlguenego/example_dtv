@@ -27,7 +27,7 @@
         yAxis = d3.svg.axis().scale(yScale).orient("left");
 
     // setup fill color
-    var cValue = function (d) { return d.valeur_fonciere; },
+    var cValue = function (d) { return d.annee; },
         color = d3.scale.category10();
 
     // add the graph canvas to the body of the webpage
@@ -52,8 +52,10 @@
         data.forEach(function (d) {
             d.surface = +d.lot1_surface_carrez;
             d.valeur_fonciere = +d.valeur_fonciere;
+            d.annee = +d.id_mutation.substr(0, 4);
             console.log(d);
         });
+        data = data.filter(d => d.annee === 2018);
         console.log(data);
 
         // don't want dots overlapping axis, so add in buffer to data domain
@@ -98,7 +100,7 @@
                     .duration(200)
                     .style("opacity", .9);
                 tooltip.html(d.adresse_numero + ' ' + d.adresse_nom_voie + "<br/> (" + xValue(d)
-                    + ", " + yValue(d) + ")")
+                    + ", " + yValue(d) + ")" + '<br>' + d.annee)
                     .style("left", (d3.event.pageX + 5) + "px")
                     .style("top", (d3.event.pageY - 28) + "px");
             })
