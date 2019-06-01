@@ -21,7 +21,7 @@
         });
     };
 
-    var margin = { top: 20, right: 20, bottom: 30, left: 80 },
+    const margin = { top: 20, right: 20, bottom: 30, left: 80 },
         width = 960 - margin.left - margin.right,
         height = 500 - margin.top - margin.bottom;
 
@@ -33,7 +33,7 @@
      */
 
     // setup x 
-    var xValue = function (d) {
+    const xValue = function (d) {
         console.log('d', d);
         return d.surface;
     }, // data -> value
@@ -42,24 +42,24 @@
         xAxis = d3.svg.axis().scale(xScale).orient("bottom");
 
     // setup y
-    var yValue = function (d) { return d.valeur_fonciere; }, // data -> value
+    const yValue = function (d) { return d.valeur_fonciere; }, // data -> value
         yScale = d3.scale.linear().range([height, 0]), // value -> display
         yMap = function (d) { return yScale(yValue(d)); }, // data -> display
         yAxis = d3.svg.axis().scale(yScale).orient("left");
 
     // setup fill color
-    var cValue = function (d) { return d.annee; },
+    const cValue = function (d) { return d.annee; },
         color = d3.scale.category10();
 
     // add the graph canvas to the body of the webpage
-    var svg = d3.select("body").append("svg")
+    const svg = d3.select("body").append("svg")
         .attr("width", width + margin.left + margin.right)
         .attr("height", height + margin.top + margin.bottom)
         .append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
     // add the tooltip area to the webpage
-    var tooltip = d3.select("body").append("div")
+    const tooltip = d3.select("body").append("div")
         .attr("class", "tooltip")
         .style("opacity", 0);
 
@@ -147,7 +147,7 @@
             .attr("d", line);
 
         // draw legend
-        var legend = svg.selectAll(".legend")
+        const legend = svg.selectAll(".legend")
             .data(color.domain())
             .enter().append("g")
             .attr("class", "legend")
