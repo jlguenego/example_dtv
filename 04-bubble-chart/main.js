@@ -13,49 +13,42 @@
     function makeTraces(allRows) {
 
         console.log(allRows);
-        const filteredData = allRows.filter(r => +r.valeur_fonciere > 1000 && +r.lot1_surface_carrez > 10);
-        const years = filteredData.map(r => +r.id_mutation.substr(0, 4));
-        const x = [...new Set(years)].sort();
-        const y = x.map(year => filteredData
-            .filter(r => +r.id_mutation.substr(0, 4) === year)
-            .map(r => (+r.valeur_fonciere) / (+r.lot1_surface_carrez))
-            .reduce((acc, n, i, array) => acc + n / array.length, 0)
-        );
-        const z = x.map(year => filteredData
-            .filter(r => +r.id_mutation.substr(0, 4) === year).length
+        const filteredData = allRows.filter(
+            r => r.alim_ssgrp_code === '0201' 
+            && r.alim_ssssgrp_code === '020101' 
+            && +(r['Glucides (g/100g)'].replace(',', '.')) < 5);
+        const x = filteredData.map(r => +(r['Protéines (g/100g)'].replace(',', '.')));
+        const y = filteredData.map(r => +(r['Glucides (g/100g)'].replace(',', '.')));
+            
+        const z = filteredData.map(r => +(r['Lipides (g/100g)'].replace(',', '.')));
+        const names = filteredData.map((r, i) => r['alim_nom_fr'] + `[Lipides (g/100g) : ${z[i]}]`);
 
-        );
         console.log(x);
         console.log(y);
         console.log(z);
 
-        const traces = [
-            { x, y: y, mode: 'lines', name: 'prix moyen m²' },
-            { x, y: z, mode: 'lines+markers', name: 'nombre de transactions', yaxis: 'y2' }
-        ];
+        const traces = [{
+            x,
+            y,
+            mode: 'markers',
+            text: names,
+            marker: {
+                size: z.map(v => Math.sqrt(v)).map(v => 30 * v)
+            }
+        }];
         return traces;
     }
 
     function makePlotly(traces) {
         const layout = {
-            title: 'Le prix du m² à Torcy (section cadastrale AE)',
+            title: 'Nutritional facts',
             xaxis: {
-                title: 'année',
-                dtick: 1,
+                title: 'Protéines (g/100g)',
             },
             yaxis: {
-                title: 'prix moyen du m²',
+                title: 'Glucides (g/100g)',
             },
-            yaxis2: {
-                title: 'nombre de transactions',
-                overlaying: 'y',
-                scaleanchor: 'y',
-                scaleratio: 50,
-                side: 'right',
-                color: 'red',
-                showgrid: true,
-                gridcolor: 'hsla(0, 0%, 98%, 1)',
-            }
+
         };
         Plotly.newPlot(element, traces, layout, { responsive: true });
     };
