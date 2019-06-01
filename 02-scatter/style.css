@@ -13,6 +13,10 @@ body {
     font: 11px sans-serif;
 }
 
+h1 {
+    text-align: center;
+}
+
 .axis path,
 .axis line {
     fill: none;
