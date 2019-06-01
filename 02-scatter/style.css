@@ -30,3 +30,9 @@ body {
     height: 28px;
     pointer-events: none;
 }
+
+.line {
+    stroke: #E4002B;
+    fill: none;
+    stroke-width: 3;
+}

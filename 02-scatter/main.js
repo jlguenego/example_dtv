@@ -1,5 +1,26 @@
 (function () {
 
+    const addLinearRegression = (data, xProjection, yProjection) => {
+        const xArray = data.map(xProjection);
+        const yArray = data.map(yProjection);
+
+        const xMean = xArray.reduce((acc, n) => acc + n, 0) / xArray.length;
+        const yMean = yArray.reduce((acc, n) => acc + n, 0) / yArray.length;
+
+        const varianceX = xArray.map(n => n - xMean).reduce((acc, n) => acc + n * n, 0) / xArray.length;
+        const covarianceXY = xArray.reduce((acc, n, i) => acc + (xArray[i] - xMean) * (yArray[i] - yMean), 0) / xArray.length;
+        // y = ax + b
+        const a = covarianceXY / varianceX;
+        const b = yMean - (a * xMean);
+
+        data.forEach(d => {
+            d.linearRegression = {
+                x: xProjection(d),
+                y: a * xProjection(d) + b
+            };
+        });
+    };
+
     var margin = { top: 20, right: 20, bottom: 30, left: 80 },
         width = 960 - margin.left - margin.right,
         height = 500 - margin.top - margin.bottom;
@@ -55,8 +76,17 @@
             d.annee = +d.id_mutation.substr(0, 4);
             console.log(d);
         });
-        data = data.filter(d => d.annee === 2018);
+        data = data.filter(d => d.annee === 2017);
         console.log(data);
+        addLinearRegression(data, d => d.surface, d => d.valeur_fonciere);
+
+        const line = d3.svg.line()
+            .x(function (d) {
+                return xScale(d.linearRegression.x);
+            })
+            .y(function (d) {
+                return yScale(d.linearRegression.y);
+            });
 
         // don't want dots overlapping axis, so add in buffer to data domain
         xScale.domain([d3.min(data, xValue) - 1, d3.max(data, xValue) + 1]);
@@ -109,6 +139,12 @@
                     .duration(500)
                     .style("opacity", 0);
             });
+
+        // draw linear regression
+        svg.append("path")
+            .datum(data)
+            .attr("class", "line")
+            .attr("d", line);
 
         // draw legend
         var legend = svg.selectAll(".legend")
