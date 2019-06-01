@@ -76,7 +76,7 @@
             d.annee = +d.id_mutation.substr(0, 4);
             console.log(d);
         });
-        data = data.filter(d => d.annee === 2017);
+        // data = data.filter(d => d.annee === 2017);
         console.log(data);
         addLinearRegression(data, d => d.surface, d => d.valeur_fonciere);
 
