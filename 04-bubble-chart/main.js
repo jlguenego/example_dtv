@@ -1,6 +1,6 @@
 (function () {
 
-    const LIMIT_GLUCIDE = 3;
+    const LIMIT_GLUCIDE = 10;
     const LIPID_SCALE = 30;
 
     const element = document.querySelector('#line-chart');
@@ -20,7 +20,7 @@
         const filteredData = allRows.filter(
             r => r.alim_ssgrp_code === '0201'
                 && r.alim_ssssgrp_code === '020101'
-                && +(r['Glucides (g/100g)'].replace(',', '.')) < LIMIT_GLUCIDE);
+                && +(r['Glucides (g/100g)'].replace(',', '.')) > LIMIT_GLUCIDE);
         const x = filteredData.map(r => +(r['Protéines (g/100g)'].replace(',', '.')));
         const y = filteredData.map(r => +(r['Glucides (g/100g)'].replace(',', '.')));
 
@@ -37,8 +37,10 @@
             mode: 'markers',
             text: names,
             marker: {
-                size: z.map(v => Math.sqrt(v)).map(v => LIPID_SCALE * v)
-            }
+                size: z.map(v => Math.sqrt(v)).map(v => LIPID_SCALE * v),
+                // color: 'green',
+            },
+            name: 'Légumes crus',
         }
         return trace;
     }
@@ -49,7 +51,7 @@
         const filteredData = allRows.filter(
             r => r.alim_ssgrp_code === '0201'
                 && r.alim_ssssgrp_code === '020102'
-                && +(r['Glucides (g/100g)'].replace(',', '.')) < LIMIT_GLUCIDE);
+                && +(r['Glucides (g/100g)'].replace(',', '.')) > LIMIT_GLUCIDE);
         const x = filteredData.map(r => +(r['Protéines (g/100g)'].replace(',', '.')));
         const y = filteredData.map(r => +(r['Glucides (g/100g)'].replace(',', '.')));
 
@@ -68,7 +70,8 @@
             marker: {
                 size: z.map(v => Math.sqrt(v)).map(v => LIPID_SCALE * v),
                 color: 'red'
-            }
+            },
+            name: 'Légumes cuits',
         }
         return trace;
     }
