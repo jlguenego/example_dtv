@@ -76,10 +76,10 @@
                 return paringData ? color(paringData.population.replace(',', '')) : color(0);
             });
 
-        svg.append("path")
-            .datum(topojson.mesh(france, france.objects.regions, function (a, b) { return a.properties.name !== b.properties.name || a === b; }))
-            .attr("class", "border")
-            .attr("d", path);
+        // svg.append("path")
+        //     .datum(topojson.mesh(france, france.objects.regions, function (a, b) { return a.properties.name !== b.properties.name || a === b; }))
+        //     .attr("class", "border")
+        //     .attr("d", path);
     };
 
 
