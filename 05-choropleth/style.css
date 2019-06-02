@@ -2,20 +2,32 @@
     box-sizing: border-box;
 }
 
-html, body {
+html,
+body {
     height: 100%;
     margin: 0;
     padding: 0;
 }
 
-label {
-    display: block;
-    padding: 1em;
+body {
+    font: 10px sans-serif;
 }
 
-input {
-    display: block;
-    width: 100%;
-    padding: 1em;
-    margin: 0;
+.border {
+    stroke-width: .3px;
+    fill: none;
+    stroke: #333;
+}
+
+.caption {
+    font-weight: bold;
+}
+
+.key path {
+    display: none;
+}
+
+.key line {
+    stroke: #000;
+    shape-rendering: crispEdges;
 }
