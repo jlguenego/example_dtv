@@ -3,11 +3,14 @@
     // inspired by https://bl.ocks.org/bricedev/97c53d6ed168902239f7
 
     var width = 960,
-        height = 500,
+        height = 700,
         formatNumber = d3.format("s");
 
+    const populationBins = [250000, 500000, 750000, 1000000, 1250000, 1500000, 2000000, 3000000];
+    const colorBins = populationBins.map(n => `hsl(240, 30%, ${100 - n * 100 / 3000000}%)`)
+
     var color = d3.scale.threshold()
-        .domain([250000, 500000, 750000, 1000000, 1250000, 1500000, 1750000])
+        .domain(populationBins)
         .range(["#deebf7", "#c6dbef", "#9ecae1", "#6baed6", "#4292c6", "#2171b5", "#08519c", "#08306b"]);
 
     var x = d3.scale.linear()
@@ -25,11 +28,15 @@
         .center([0, 49.5])
         .rotate([-2.8, 3])
         .parallels([45, 55])
-        .scale(2500)
+        .scale(3800)
         .translate([width / 2, height / 2]);
 
     var path = d3.geo.path()
         .projection(projection);
+
+    const tooltip = d3.select("body").append("div")
+        .attr("class", "tooltip")
+        .style("opacity", 0);
 
     var svg = d3.select('body').append("svg")
         .attr("width", width)
@@ -70,16 +77,25 @@
             .attr("class", "departements")
             .attr("d", path)
             .style("fill", function (departement) {
-                console.log(departement);
                 var paringData = population.filter(function (population) { return departement.properties.code === population.numero; })[0];
-                console.log('paringData', paringData);
-                return paringData ? color(paringData.population.replace(',', '')) : color(0);
+                return paringData ? color(paringData.population.replace(/,/g, '')) : color(0);
+            })
+            .on("mouseover", function (d) {
+                var paringData = population.filter(function (population) { return d.properties.code === population.numero; })[0];
+                tooltip.transition()
+                    .duration(200)
+                    .style("opacity", .9);
+                tooltip.html(`${d.properties.nom} (${d.properties.code}): ${paringData.population.replace(/,/g, ' ')}`)
+                    .style("left", (d3.event.pageX + 5) + "px")
+                    .style("top", (d3.event.pageY - 28) + "px");
+            })
+            .on("mouseout", function (d) {
+                tooltip.transition()
+                    .duration(500)
+                    .style("opacity", 0);
             });
 
-        // svg.append("path")
-        //     .datum(topojson.mesh(france, france.objects.regions, function (a, b) { return a.properties.name !== b.properties.name || a === b; }))
-        //     .attr("class", "border")
-        //     .attr("d", path);
+
     };
 
 

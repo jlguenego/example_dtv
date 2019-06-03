@@ -31,3 +31,21 @@ body {
     stroke: #000;
     shape-rendering: crispEdges;
 }
+
+.departements {
+    stroke: #000;
+    stroke-width: 0.5px;
+    shape-rendering: crispEdges;
+}
+
+.tooltip {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 200px;
+    height: 28px;
+    pointer-events: none;
+    background: black;
+    color: white;
+}
