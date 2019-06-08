@@ -62,6 +62,10 @@
             return trace;
         });
         const layout = {
+            // Limitation on plotly JS... xaxis does not work.
+            // xaxis: {
+            //     title: 'Protéines (g/100g)',
+            // },
             margin: {
                 l: 0,
                 r: 0,
