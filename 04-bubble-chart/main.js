@@ -7,7 +7,7 @@
 
     function makeplot() {
         const csv = Plotly.d3.dsv(';', "text/plain");
-        Plotly.d3.csv("ciqual-2017.csv", data => {
+        Plotly.d3.csv("../data/ciqual-2017.csv", data => {
             const trace1 = makeTrace1(data);
             const trace2 = makeTrace2(data);
             makePlotly([trace1, trace2]);
