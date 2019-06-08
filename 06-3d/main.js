@@ -8,10 +8,11 @@
             // get the different subgroup
             const subgroup = getSubGroup(data);
             const aside = document.querySelector('aside');
-            const html = Object.keys(subgroup).map(n => `<label><input type="checkbox" name="${n}">${subgroup[n]}</label>`).join('');
+            const html = Object.keys(subgroup).sort().map(n => `<label><input type="checkbox" name="${subgroup[n]}">${n}</label>`).join('');
             console.log('html', html);
             aside.innerHTML = html;
             addEvent(subgroup);
+            applyConfig(config, subgroup);
         });
     };
 
@@ -21,7 +22,7 @@
             if (n.alim_ssssgrp_nom_fr.length < 2) {
                 return acc;
             }
-            acc[n.alim_ssssgrp_code] = n.alim_ssssgrp_nom_fr;
+            acc[n.alim_ssssgrp_nom_fr] = n.alim_ssssgrp_code;
             return acc;
         }, {});
         console.log('subgroup', subgroup);
@@ -30,7 +31,7 @@
 
     const addEvent = subgroup => {
         Object.keys(subgroup).forEach(n => {
-            document.querySelector(`input[name="${n}"]`).addEventListener('input', e => {
+            document.querySelector(`input[name="${subgroup[n]}"]`).addEventListener('input', e => {
                 console.log('e', e);
                 if (e.target.checked) {
                     show(e.target.name);
@@ -39,7 +40,16 @@
                 }
             });
         });
-    }
+    };
+
+    const applyConfig = (config, subgroup) => {
+        config.forEach(n => {
+            console.log('n', n);
+            console.log('n', subgroup[n]);
+            const input = document.querySelector(`input[name="${subgroup[n]}"]`);
+            input.checked = true;
+        });
+    };
 
     const show = code => {
         console.log('show code', code);
