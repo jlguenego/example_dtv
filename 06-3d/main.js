@@ -1,15 +1,18 @@
 (function () {
 
-    
-    const config = ['légumes crus', 'fruits crus'];
+
+    const config = new Set(['020101', '020401']);
+    let data;
+    let subgroup;
 
     function main() {
-        Plotly.d3.csv("../data/ciqual-2017.csv", data => {
+        Plotly.d3.csv("../data/ciqual-2017.csv", csvData => {
+            data = csvData;
             // get the different subgroup
-            const subgroup = getSubGroup(data);
-            drawAside(subgroup);
-            addEvent(subgroup);
-            applyConfig(config, subgroup);
+            subgroup = getSubGroup(data);
+            drawAside();
+            addEvent();
+            applyConfig(config);
             drawBubbles(data, config);
         });
     };
@@ -36,8 +39,8 @@
     };
 
     const drawBubbles = (data, config) => {
-        const traces = config.map(n => {
-            const rows = data.filter(d => d.alim_ssssgrp_nom_fr === n);
+        const traces = [...config].map(n => {
+            const rows = data.filter(d => d.alim_ssssgrp_code === n);
             const trace = {
                 type: 'scatter3d',
                 x: unpack(rows, 'Protéines (g/100g)'),
@@ -53,7 +56,8 @@
                     },
                     opacity: 0.8
                 },
-                name: n,
+                name: subgroup[n],
+                
             };
             return trace;
         });
@@ -63,15 +67,15 @@
                 r: 0,
                 b: 0,
                 t: 50
-            }
+            },
         };
         const element = document.querySelector('section');
-        Plotly.newPlot(element, traces, layout);
+        Plotly.newPlot(element, traces, layout, { responsive: true });
     };
 
-    const drawAside = (subgroup) => {
+    const drawAside = () => {
         const aside = document.querySelector('aside');
-        const html = Object.keys(subgroup).sort().map(n => `<label><input type="checkbox" name="${subgroup[n]}">${n}</label>`).join('');
+        const html = Object.keys(subgroup).sort().map(n => `<label><input type="checkbox" name="${n}">${subgroup[n]}</label>`).join('');
         console.log('html', html);
         aside.innerHTML = html;
     }
@@ -82,16 +86,16 @@
             if (n.alim_ssssgrp_nom_fr.length < 2) {
                 return acc;
             }
-            acc[n.alim_ssssgrp_nom_fr] = n.alim_ssssgrp_code;
+            acc[n.alim_ssssgrp_code] = n.alim_ssssgrp_nom_fr;
             return acc;
         }, {});
         console.log('subgroup', subgroup);
         return subgroup;
     }
 
-    const addEvent = subgroup => {
+    const addEvent = () => {
         Object.keys(subgroup).forEach(n => {
-            document.querySelector(`input[name="${subgroup[n]}"]`).addEventListener('input', e => {
+            document.querySelector(`input[name="${n}"]`).addEventListener('input', e => {
                 console.log('e', e);
                 if (e.target.checked) {
                     show(e.target.name);
@@ -102,20 +106,26 @@
         });
     };
 
-    const applyConfig = (config, subgroup) => {
+    const applyConfig = (config) => {
         config.forEach(n => {
             console.log('n', n);
             console.log('n', subgroup[n]);
-            const input = document.querySelector(`input[name="${subgroup[n]}"]`);
+            const input = document.querySelector(`input[name="${n}"]`);
             input.checked = true;
         });
     };
 
     const show = code => {
         console.log('show code', code);
+        config.add(code);
+        drawBubbles(data, config);
+
     }
     const hide = code => {
         console.log('hide code', code);
+        config.delete(code);
+        drawBubbles(data, config);
+
     }
 
 
