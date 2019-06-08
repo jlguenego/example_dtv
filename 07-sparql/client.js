@@ -1,7 +1,5 @@
 const axios = require('axios');
 const fs = require('fs');
-
-
 const endPoint = 'https://query.wikidata.org/bigdata/namespace/wdq/sparql';
 
 const sparql = encodeURIComponent(fs.readFileSync('./department.sparql'));
