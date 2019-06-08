@@ -2,7 +2,7 @@ const axios = require('axios');
 const fs = require('fs');
 const endPoint = 'https://query.wikidata.org/bigdata/namespace/wdq/sparql';
 
-const sparql = encodeURIComponent(fs.readFileSync('./department.sparql'));
+const sparql = encodeURIComponent(fs.readFileSync('./department.sparql.txt'));
 console.log('sparql', sparql);
 
 // Make a request for a user with a given ID
