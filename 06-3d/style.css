@@ -12,12 +12,14 @@ main {
     display: flex;
     align-items: stretch;
     border: 1em solid #ddd;
+    height: 100%;
 }
 
 main aside {
     width: 20em;
     background: #eee;
     flex-grow: 0;
+    overflow: scroll;
 }
 main section {
     background: white;
