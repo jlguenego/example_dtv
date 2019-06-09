@@ -16,59 +16,61 @@ d3.csv("fromage_francais.sparql.txt.csv", function (error, data) {
     console.log('data', data);
     const types = [...data.reduce((acc, n) => acc.add(n.typeLabel), new Set())].sort();
     console.log('types', types);
+    const fromages = [...data.reduce((acc, n) => acc.add(n.fromageLabel), new Set())].sort();
+    console.log('fromages', fromages);
 
-    // const regions = data.reduce((acc, n) => acc.add(n.parent), new Set());
-    // console.log('regions', regions);
-    // data = [...regions].map(r => ({ id: `${r}`, parent: 'France' })).concat(data);
-    // data.push({ id: 'France' });
+    const fromageText = svg.selectAll("text.fromageText")
+        .data(fromages)
+        .enter().append("text")
+        .attr("x", 300)
+        .attr("y", (d, i) => i * 20 + 370)
+        .attr("fill", "red")
+        .attr("text-anchor", "end")
+        .text(d => d);
 
-    // var root = d3.stratify()
-    //     .id(d => d.id)
-    //     .parentId(d => d.parent)
-    //     (data)
-    //     .sum(d => d.size)
-    //     .sort(function (a, b) { return b.height - a.height || b.value - a.value; });
+    const typeText = svg.selectAll("text.typeText")
+        .data(types)
+        .enter().append("text")
+        .attr("fill", "blue")
+        .attr("transform", (d, i) => `translate(${i * 20 + 320}, 350) rotate(-90)`)
+        .attr("text-anchor", "start")
+        .text(d => d);
 
-    // console.log('root', root);
+    const circle = svg.selectAll("circle")
+        .data(data)
+        .enter().append("circle")
+        .attr("fill", "black")
+        .attr("r", 5)
+        .attr("transform", (d, i) => {
+            const x = types.indexOf(d.typeLabel);
+            const y = fromages.indexOf(d.fromageLabel);
+            return `translate(${x * 20 + 315}, ${y * 20 + 363})`;
+        })
+        .on("mouseover", function (d, i) {
+            console.log('this', this);
+            const circle = d3.select(this)
+                .attr("fill", "orange")
+                .attr("r", 10);
+            console.log('circle', circle);
 
-    // treemap(root);
+            svg.append("text")
+                .attr("id", "text_to_print")
+                .attr("fill", "green")
+                .attr("transform", () => {
+                    console.log('d', d);
+                    const x = types.indexOf(d.typeLabel);
+                    const y = fromages.indexOf(d.fromageLabel);
+                    return `translate(${x * 20 + 325}, ${y * 20 + 363})`;
+                })
+                .text(d.typeLabel);
+        })
+        .on("mouseout", function (d, i) {
+            console.log('this', this);
+            const circle = d3.select(this)
+                .attr("fill", "black")
+                .attr("r", 5);
+            d3.select("#text_to_print").remove();
+        });
 
-    // var cell = svg.selectAll("a")
-    //     .data(root.leaves())
-    //     .enter().append("a")
-    //     .attr("target", "_blank")
-    //     .attr("xlink:href", d => `https://fr.wikipedia.org/wiki/${encodeURIComponent(d.id.replace(/ \[.*\]/, ''))}`)
-    //     .attr("transform", d => `translate(${d.x0},${d.y0})`);
 
-    // cell.append("rect")
-    //     .attr("id", d => d.id)
-    //     .attr("width", d => d.x1 - d.x0)
-    //     .attr("height", d => d.y1 - d.y0)
-    //     .attr("fill", d => {
-    //         const a = d.ancestors();
-    //         return color(a[a.length - 2].id);
-    //     });
-
-    // cell.append("clipPath")
-    //     .attr("id", function (d) { return "clip-" + d.id; })
-    //     .append("use")
-    //     .attr("xlink:href", function (d) { return `"#" + d.id`; });
-
-    // var label = cell.append("text")
-    //     .attr("clip-path", function (d) { return "url(#clip-" + d.id + ")"; });
-
-    // label.append("tspan")
-    //     .attr("x", 4)
-    //     .attr("y", 13)
-    //     .text(function (d) { 
-    //         console.log('d', d);
-    //         return d.data.id; });
-
-    // label.append("tspan")
-    //     .attr("x", 4)
-    //     .attr("y", 25)
-    //     .text(function (d) { return format(d.value); });
-
-    // cell.append("title")
-    //     .text(d => `https://fr.wikipedia.org/wiki/${encodeURIComponent(d.id.replace(/ \[.*\]/, ''))}`);
 });
