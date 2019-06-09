@@ -1,14 +1,15 @@
 #Actual French metropolitan departments
-SELECT ?numero ?depLabel ?regionLabel   WHERE {
+SELECT ?numero ?depLabel ?regionLabel ?population WHERE {
   ?dep wdt:P31 wd:Q6465;
     wdt:P2586 ?numero;
+    wdt:P1082 ?population;
     wdt:P131 ?region.
   FILTER(NOT EXISTS {
     ?dep p:P31 ?stat.
     ?stat pq:P582 ?endTime.
   })
-  FILTER(?region not in ( wd:Q16665915 ))
+  FILTER(?region NOT IN(wd:Q16665915))
   SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en". }
 }
-ORDER BY ASC(?numero)
+ORDER BY (?numero)
 LIMIT 100
