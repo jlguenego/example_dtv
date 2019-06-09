@@ -1,0 +1,7 @@
+#Fromage
+SELECT ?fromage ?fromageLabel ?type ?typeLabel WHERE {
+  ?fromage wdt:P279 wd:Q2223649.
+  ?fromage wdt:P279 ?type
+  SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en". }
+}
+order by asc(UCASE(str(?fromageLabel)))
