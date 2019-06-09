@@ -9,7 +9,7 @@ SELECT ?numero ?depLabel ?regionLabel ?population WHERE {
     ?stat pq:P582 ?endTime.
   })
   FILTER(?region NOT IN(wd:Q16665915))
-  SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en". }
+  SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],fr". }
 }
 ORDER BY (?numero)
 LIMIT 100

@@ -11,52 +11,29 @@ var treemap = d3.treemap()
     .round(true)
     .padding(1);
 
-var version = {
-    "d3-array": "1.0.2",
-    "d3-axis": "1.0.4",
-    "d3-brush": "1.0.3",
-    "d3-chord": "1.0.3",
-    "d3-collection": "1.0.2",
-    "d3-color": "1.0.2",
-    "d3-dispatch": "1.0.2",
-    "d3-drag": "1.0.2",
-    "d3-dsv": "1.0.3",
-    "d3-ease": "1.0.2",
-    "d3-force": "1.0.4",
-    "d3-format": "1.0.2",
-    "d3-geo": "1.4.0",
-    "d3-hierarchy": "1.0.3",
-    "d3-interpolate": "1.1.2",
-    "d3-path": "1.0.3",
-    "d3-polygon": "1.0.2",
-    "d3-quadtree": "1.0.2",
-    "d3-queue": "3.0.3",
-    "d3-random": "1.0.2",
-    "d3-request": "1.0.3",
-    "d3-scale": "1.0.4",
-    "d3-selection": "1.0.3",
-    "d3-shape": "1.0.4",
-    "d3-time": "1.0.4",
-    "d3-time-format": "2.0.3",
-    "d3-timer": "1.0.3",
-    "d3-transition": "1.0.3",
-    "d3-voronoi": "1.1.0",
-    "d3-zoom": "1.1.0"
-};
-
 d3.csv("department.sparql.txt.csv", d => {
     console.log('d', d);
-    d.size = +d.size;
-    return d;
+    return {
+        id: `${d.depLabel} [${d.numero}]`,
+        size: +d.population,
+        parent: d.regionLabel
+    };
 }, function (error, data) {
     if (error) throw error;
 
+    const regions = data.reduce((acc, n) => acc.add(n.parent), new Set());
+    console.log('regions', regions);
+    data = [...regions].map(r => ({ id: `${r}`, parent: 'France' })).concat(data);
+    data.push({ id: 'France' });
+
     var root = d3.stratify()
-        .id(function (d) { return d.path; })
-        .parentId(function (d) { return d.path.substring(0, d.path.lastIndexOf("/")); })
+        .id(d => d.id)
+        .parentId(d => d.parent)
         (data)
-        .sum(function (d) { return d.size; })
+        .sum(d => d.size)
         .sort(function (a, b) { return b.height - a.height || b.value - a.value; });
+
+    console.log('root', root);
 
     treemap(root);
 
@@ -64,19 +41,22 @@ d3.csv("department.sparql.txt.csv", d => {
         .data(root.leaves())
         .enter().append("a")
         .attr("target", "_blank")
-        .attr("xlink:href", function (d) { var p = d.data.path.split("/"); return "https://github.com/" + p.slice(0, 2).join("/") + "/blob/v" + version[p[1]] + "/src/" + p.slice(2).join("/"); })
-        .attr("transform", function (d) { return "translate(" + d.x0 + "," + d.y0 + ")"; });
+        .attr("xlink:href", d => `https://fr.wikipedia.org/wiki/${encodeURIComponent(d.id.replace(/ \[.*\]/, ''))}`)
+        .attr("transform", d => `translate(${d.x0},${d.y0})`);
 
     cell.append("rect")
-        .attr("id", function (d) { return d.id; })
-        .attr("width", function (d) { return d.x1 - d.x0; })
-        .attr("height", function (d) { return d.y1 - d.y0; })
-        .attr("fill", function (d) { var a = d.ancestors(); return color(a[a.length - 2].id); });
+        .attr("id", d => d.id)
+        .attr("width", d => d.x1 - d.x0)
+        .attr("height", d => d.y1 - d.y0)
+        .attr("fill", d => {
+            const a = d.ancestors();
+            return color(a[a.length - 2].id);
+        });
 
     cell.append("clipPath")
         .attr("id", function (d) { return "clip-" + d.id; })
         .append("use")
-        .attr("xlink:href", function (d) { return "#" + d.id; });
+        .attr("xlink:href", function (d) { return `"#" + d.id`; });
 
     var label = cell.append("text")
         .attr("clip-path", function (d) { return "url(#clip-" + d.id + ")"; });
@@ -84,7 +64,9 @@ d3.csv("department.sparql.txt.csv", d => {
     label.append("tspan")
         .attr("x", 4)
         .attr("y", 13)
-        .text(function (d) { return d.data.path.substring(d.data.path.lastIndexOf("/") + 1, d.data.path.lastIndexOf(".")); });
+        .text(function (d) { 
+            console.log('d', d);
+            return d.data.id; });
 
     label.append("tspan")
         .attr("x", 4)
@@ -92,5 +74,5 @@ d3.csv("department.sparql.txt.csv", d => {
         .text(function (d) { return format(d.value); });
 
     cell.append("title")
-        .text(function (d) { return d.id + "\n" + format(d.value); });
+        .text(d => `https://fr.wikipedia.org/wiki/${encodeURIComponent(d.id.replace(/ \[.*\]/, ''))}`);
 });
