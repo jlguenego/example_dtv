@@ -18,17 +18,32 @@ ORDER BY DESC(?superficie)
     const data = await d3.sparql(wikidataUrl, request);
     console.log('data', data);
 
-    const draw = (data) => {
+    var t = d3.transition()
+        .duration(750)
+        .ease(d3.easeLinear);
+
+    const draw = data => {
         const root = d3.select('div.root');
-        const item = root.selectAll('div.items')
-            .data(data)
-            .enter()
-            .append('div')
-            .classed("item", true)
-            .html(d => `<div>${d.riverLabel}</div><div>${d.longueur}</div><div>${d.superficie}</div>`)
+        const dataElt = root.selectAll('div.items')
+            .data(data, d => d, d => d.riverLabel);
+
+        dataElt.exit().remove();
+
+        dataElt
+            .transition(t)
             .style("transform", (d, i) => `translate(0, ${i * scale}em)`);
 
-        
+        dataElt.enter()
+            .append('div')
+            .classed("item", true)
+            .html(d => {
+                console.log('adding');
+                return `<div>${d.riverLabel}</div><div>${d.longueur}</div><div>${d.superficie}</div>`;
+            })
+            .transition(t)
+            .style("transform", (d, i) => `translate(0, ${i * scale}em)`);
+
+
     };
 
     draw(data);
@@ -40,10 +55,10 @@ ORDER BY DESC(?superficie)
             console.log('value', value);
             console.log('data', data);
 
-            const newData = data.sort((a, b) => a[value] < b[value]);
+            const newData = data.sort((a, b) => a[value] < b[value] ? 1 : -1);
             draw(newData);
         });
-        
+
     });
-    
+
 })();
