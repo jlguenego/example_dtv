@@ -5,8 +5,7 @@ SELECT ?numero ?depLabel ?regionLabel ?population WHERE {
     wdt:P1082 ?population;
     wdt:P131 ?region.
   FILTER(NOT EXISTS {
-    ?dep p:P31 ?stat.
-    ?stat pq:P582 ?endTime.
+    ?dep p:P31 [pq:P582 ?endTime].
   })
   FILTER(?region NOT IN(wd:Q16665915))
   SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],fr". }
