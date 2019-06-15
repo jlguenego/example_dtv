@@ -1,3 +1,7 @@
+label {
+    display: block;
+}
+
 div.root {
     position: relative;
     display: block;
