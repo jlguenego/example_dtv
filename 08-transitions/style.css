@@ -1,5 +1,23 @@
+* {
+    box-sizing: border-box;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+}
+
 label {
     display: block;
+}
+
+div.header {
+    display: flex;
+    width: 100%;
+    padding: 0.2em;
+    background: #eee;
+    margin: 1em 0;
+    font-weight: bold;
 }
 
 div.root {
@@ -7,9 +25,17 @@ div.root {
     display: block;
     flex-flow: column nowrap;
 }
+
 div.item {
     position: absolute;
+    top: 0;
+    display: flex;
     width: 100%;
     padding: 0.2em;
     background: #eee;
+}
+
+div.item>div,div.header>div {
+    width: 10em;
+    padding: 0 1em;
 }
