@@ -11,6 +11,7 @@
   "license": "ISC",
   "dependencies": {
     "axios": "^0.19.0",
+    "d3-sparql": "^2.0.0",
     "eslint": "^5.16.0",
     "express": "^4.17.1",
     "plotly.js-dist": "^1.48.0",
