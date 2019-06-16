@@ -17,7 +17,12 @@ ORDER BY DESC(?superficie)
 
     const data = await d3.sparql(wikidataUrl, request);
 
-    var color = 
+
+    const color = x => {
+        const array = new Array(10).fill(0).map((n, i) => `hsl(240, 100%, ${85 + 1.5 * i}%)`);
+        const max = 20000;
+        return array[Math.floor((x/max)*10)];
+    };
 
     var t = d3.transition()
         .duration(750)
@@ -53,6 +58,9 @@ ORDER BY DESC(?superficie)
             .html(d => {
                 console.log('addingx');
                 return `<span>${d.riverLabel}</span><span>${d.longueur}</span><span>${d.superficie}</span>`;
+            })
+            .style("background", d => {
+                return color(+d.superficie);
             })
             .transition(t)
             .style("transform", (d, i) => `translate(0, ${i * scale}em)`);
