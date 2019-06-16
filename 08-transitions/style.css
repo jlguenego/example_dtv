@@ -35,7 +35,7 @@ div.item {
     background: #eee;
 }
 
-div.item>div,div.header>div {
+div.item>span,div.header>span {
     width: 10em;
     padding: 0 1em;
 }

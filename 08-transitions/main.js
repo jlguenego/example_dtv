@@ -16,7 +16,8 @@ ORDER BY DESC(?superficie)
     `;
 
     const data = await d3.sparql(wikidataUrl, request);
-    console.log('data', data);
+
+    var color = 
 
     var t = d3.transition()
         .duration(750)
@@ -24,21 +25,34 @@ ORDER BY DESC(?superficie)
 
     const draw = data => {
         const root = d3.select('div.root');
-        const dataElt = root.selectAll('div.items')
-            .data(data, d => d, d => d.riverLabel);
+        const dataElt = root.selectAll('div.item')
+            .data(data, function (d) {
+                return d.riverLabel;
+            });
 
-        dataElt.exit().remove();
+        dataElt.exit()
+            .attr("class", "item exit")
+            .transition(t)
+            .style("color", d => {
+                console.log('exit');
+                return "red";
+            })
+            .remove();
 
         dataElt
+            .attr("class", d => {
+                console.log('update')
+                return "item update";
+            })
             .transition(t)
             .style("transform", (d, i) => `translate(0, ${i * scale}em)`);
 
         dataElt.enter()
             .append('div')
-            .classed("item", true)
+            .attr("class", "item enter")
             .html(d => {
-                console.log('adding');
-                return `<div>${d.riverLabel}</div><div>${d.longueur}</div><div>${d.superficie}</div>`;
+                console.log('addingx');
+                return `<span>${d.riverLabel}</span><span>${d.longueur}</span><span>${d.superficie}</span>`;
             })
             .transition(t)
             .style("transform", (d, i) => `translate(0, ${i * scale}em)`);
@@ -46,16 +60,14 @@ ORDER BY DESC(?superficie)
 
     };
 
-    draw(data);
+    draw(data.filter((d, i) => i < 10));
 
     document.getElementsByName('classement').forEach(input => {
         input.addEventListener('click', e => {
-            console.log('e', e);
             const value = e.target.value;
-            console.log('value', value);
-            console.log('data', data);
-
-            const newData = data.sort((a, b) => a[value] < b[value] ? 1 : -1);
+            const newData = data
+                .sort((a, b) => a[value] < b[value] ? 1 : (a[value] > b[value]) ? -1 : 0)
+                .filter((d, i) => i < 10);
             draw(newData);
         });
 
