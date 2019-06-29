@@ -21,7 +21,7 @@ ORDER BY DESC(?superficie)
     const color = x => {
         const array = new Array(10).fill(0).map((n, i) => `hsl(240, 100%, ${Math.floor(96 - 1.2 * i)}%)`);
         const max = 20000;
-        return array[Math.floor((x/max)*10)];
+        return array[Math.floor((x / max) * 10)];
     };
 
     var t = d3.transition()
@@ -64,7 +64,6 @@ ORDER BY DESC(?superficie)
             })
             .transition(t)
             .style("transform", (d, i) => `translate(0, ${i * scale}em)`);
-
 
     };
 

@@ -9,7 +9,9 @@ npm i
 npm start
 ```
 
-Then go to the URL `http://localhost:8000`
+Then open the URL `http://localhost:8000`.
+
+Go to the different directories.
 
 
 ## Author
