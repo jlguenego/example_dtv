@@ -1,0 +1,21 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: sans-serif;
+}
+
+#histo {
+    background: #eee;
+    padding: 1em;
+}
+
+.bar {
+    display: flex;
+    justify-content: space-between;
+    background: hsl(240, 40%, 60%);
+    color: white;
+    margin: 1em 0;
+    padding: 0.2em 0.5em;
+}
