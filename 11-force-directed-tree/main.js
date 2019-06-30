@@ -90,7 +90,7 @@ WHERE
             .data(links)
             .join('line');
 
-        const color = level => `hsl(${Math.floor(level * 10)}, 100%, 50%)`;
+        const color = level => `hsl(${Math.floor(level * 30)}, 100%, 50%)`;
 
         const node = svg.append('g')
             .attr('fill', '#fff')
