@@ -1,0 +1,14 @@
+#mapid {
+    width: 800px;
+    height: 600px;
+}
+
+.accidents {
+    width: 800px;
+    height: 600px;
+}
+
+h1, h2 {
+    padding: 0;
+    margin: 0;
+}
