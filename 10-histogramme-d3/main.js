@@ -31,15 +31,8 @@
         return groupby;
     }
 
-
     draw(new Array(7).fill(0));
     const data = await buildData();
-    console.log('data', data);
     draw(data);
-
-
-
-
-
 
 })();
