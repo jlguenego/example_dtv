@@ -18,4 +18,5 @@ body {
     color: white;
     margin: 1em 0;
     padding: 0.2em 0.5em;
+    min-width: 10em;
 }
