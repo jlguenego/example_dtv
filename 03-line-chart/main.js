@@ -38,7 +38,7 @@
 
     function makePlotly(traces) {
         const layout = {
-            title: 'Le prix du m² à Torcy (section cadastrale AE)',
+            title: 'Prix du m² à Torcy (Cadastre AE)',
             xaxis: {
                 title: 'année',
                 dtick: 1,

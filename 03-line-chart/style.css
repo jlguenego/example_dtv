@@ -8,14 +8,8 @@ html, body {
     padding: 0;
 }
 
-label {
-    display: block;
-    padding: 1em;
+body {
+    padding: 0.5em;
 }
 
-input {
-    display: block;
-    width: 100%;
-    padding: 1em;
-    margin: 0;
-}
+
