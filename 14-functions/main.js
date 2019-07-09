@@ -25,13 +25,7 @@
 
     const plot = svg => svg
         .append('path')
-        .attr('d', function (d) {
-            return d3.line()(
-                x.ticks(1000).map(function (xi) {
-                    return [x(xi), y(Math.sin(xi))]
-                })
-            );
-        });
+        .attr('d', d3.line()(x.ticks(1000).map(t => [x(t), y(Math.sin(t))])));
 
 
 
