@@ -23,9 +23,14 @@
         .call((...args) => console.log('args', args))
         .call(d3.axisLeft(y).tickSizeOuter(0));
 
+    const f1 = d3.line()(x.ticks(1000).map(t => [x(t), y(0.01 * t ** 2)]));
+    const f2 = d3.line()(x.ticks(1000).map(t => [x(t), y(Math.sin(t))]));
+
+    let fn = f1;
+
     const plot = svg => svg
         .append('path')
-        .attr('d', d3.line()(x.ticks(1000).map(t => [x(t), y(Math.sin(t))])));
+        .attr('d', fn);
 
 
 
@@ -42,4 +47,14 @@
 
     const plots = svg.append('g').classed('plots', true);
     plots.append('g').call(plot);
+
+
+
+    document.querySelector('#transition').addEventListener('click', e => {
+        console.log('click');
+        fn = (fn === f1) ? f2 : f1;
+        plots.select('g').select('path')
+            .transition().duration(2000)
+            .attr('d', fn);
+    });
 })();
