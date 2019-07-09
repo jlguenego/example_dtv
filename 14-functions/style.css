@@ -20,3 +20,8 @@ svg {
     max-width: 40em;
     height: 40em;
 }
+
+path {
+    fill: transparent;
+    stroke: black;
+}
