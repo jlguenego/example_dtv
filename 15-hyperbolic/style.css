@@ -4,21 +4,22 @@ h1 {
 
 #main {
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-evenly;
 }
 
 svg {
     background: #eee;
     width: 100%;
-    max-width: 40em;
-    height: 40em;
+    max-width: 30em;
+    max-height: 30em;
 }
 
 #command {
     border: 1px solid #eee;
     width: 100%;
-    max-width: 40em;
-    height: 40em;
+    max-width: 20em;
+    height: 20em;
 }
 
 path {
