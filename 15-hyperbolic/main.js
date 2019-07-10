@@ -79,6 +79,7 @@
         console.log('mousedown');
         const move = e => {
             console.log('mousemove');
+            
             document.addEventListener('mouseup', e => {
                 console.log('mouseup');
                 document.removeEventListener('mousemove', move);
