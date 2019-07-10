@@ -1,4 +1,10 @@
+* {
+    box-sizing: border-box;
+}
+
 h1 {
+    padding: 0.3em;
+    margin: 0;
     text-align: center;
 }
 
@@ -12,7 +18,14 @@ svg {
     background: #eee;
     width: 100%;
     max-width: 30em;
-    max-height: 30em;
+    height: 20em;
+}
+
+@media only screen and (max-width: 400px) {
+    svg {
+        width: 20em;
+        height: 20em;
+    }
 }
 
 #command {
@@ -20,6 +33,7 @@ svg {
     width: 100%;
     max-width: 20em;
     height: 20em;
+    padding: 0.5em;
 }
 
 path {
