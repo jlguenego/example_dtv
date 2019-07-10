@@ -1,0 +1,27 @@
+h1 {
+    text-align: center;
+}
+
+#main {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+svg {
+    background: #eee;
+    width: 100%;
+    max-width: 40em;
+    height: 40em;
+}
+
+#command {
+    border: 1px solid #eee;
+    width: 100%;
+    max-width: 40em;
+    height: 40em;
+}
+
+path {
+    fill: transparent;
+    stroke: black;
+}
