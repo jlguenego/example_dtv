@@ -100,7 +100,7 @@
             p[0] -= point[0];
             p[1] -= point[1];
         });
-        draw(hive, trans, 300);
+        draw(hive, trans, 600);
     }
 
 
