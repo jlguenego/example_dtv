@@ -16,21 +16,22 @@
     const fx = t => Math.cos((2 * Math.PI / 6) * t + Math.PI / 6);
     const fy = t => Math.sin((2 * Math.PI / 6) * t + Math.PI / 6);
 
-    const svg = d3.select('svg')
+    const d3svg = d3.select('svg')
         .attr('viewBox', [0, 0, width, height]);
-    const circleGroup = svg.append('g').classed('circles', true);
-    const pathGroup = svg.append('g').classed('paths', true);
+    const group = d3svg.append('g').classed('general', true);
+    const circleGroup = group.append('g').classed('circles', true);
+    const pathGroup = group.append('g').classed('paths', true);
 
     const range = d3.scaleLinear().domain([0, 6]).ticks(7);
     console.log('range', range);
 
-    const draw = (side, trans) => {
+    const a = Math.sqrt(3);
+    const side = 13;
+    const hive = buildHive(side).map(p => [p[0] * a, p[1] * a]);
+    // console.log('hive', hive);
 
-        const a = Math.sqrt(3);
-        const u = buildHive(side).map(p => [p[0] * a, p[1] * a]);
-        console.log('u', u);
-
-        const circles = circleGroup.selectAll('circle').data(u, function (d, i) {
+    const draw = (hive, trans) => {
+        const circles = circleGroup.selectAll('circle').data(hive, function (d, i) {
             return i;
         });
         circles.exit().remove();
@@ -43,8 +44,7 @@
             .attr('cy', d => y(trans(d)[1]))
             .attr('r', 0.1);
 
-
-        const paths = pathGroup.selectAll('path').data(u, function (d, i) {
+        const paths = pathGroup.selectAll('path').data(hive, function (d, i) {
             return i;
         });
         paths.exit().remove();
@@ -52,7 +52,6 @@
             .attr('d', d => d3.line()(range.map(t => trans([fx(t) + d[0], fy(t) + d[1]])).map(p => [x(p[0]), y(p[1])])));
         paths.enter().append('path')
             .attr('d', d => d3.line()(range.map(t => trans([fx(t) + d[0], fy(t) + d[1]])).map(p => [x(p[0]), y(p[1])])));
-
     };
 
     const euclide = p => p;
@@ -64,27 +63,24 @@
         return p.map(x => x * A * ratio);
     };
     let trans = hyperbolic;
-    const side = 13;
-    draw(side, trans);
+
+    draw(hive, trans);
 
     document.querySelector('#transition').addEventListener('click', e => {
         console.log('click');
         trans = (trans === euclide) ? hyperbolic : euclide;
         console.log('trans', trans);
-        draw(side, trans);
+        draw(hive, trans);
     });
 
-    // pan 
-    document.querySelector('svg').addEventListener('mousedown', e => {
-        console.log('mousedown');
-        const move = e => {
-            console.log('mousemove');
-            
-            document.addEventListener('mouseup', e => {
-                console.log('mouseup');
-                document.removeEventListener('mousemove', move);
-            });
-        };
-        document.addEventListener('mousemove', move);
-    });
+    // d3 zoom
+    d3svg.call(d3.zoom().on('zoom', zoomed));
+
+    function zoomed(...args) {
+        console.log('zoom', args, this, d3.event);
+        group.attr('transform', d3.event.transform);
+        
+    }
+
+
 })();
