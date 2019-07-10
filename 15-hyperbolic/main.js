@@ -3,7 +3,6 @@
 
     const width = 20;
     const height = 20;
-
     const margin = ({ top: 0, right: 0, bottom: 0, left: 0 });
 
     const x = d3.scaleLinear()
@@ -16,8 +15,6 @@
 
     const fx = t => Math.cos((2 * Math.PI / 6) * t + Math.PI / 6);
     const fy = t => Math.sin((2 * Math.PI / 6) * t + Math.PI / 6);
-
-
 
     const svg = d3.select('svg')
         .attr('viewBox', [0, 0, width, height]);
@@ -75,5 +72,18 @@
         trans = (trans === euclide) ? hyperbolic : euclide;
         console.log('trans', trans);
         draw(side, trans);
+    });
+
+    // pan 
+    document.querySelector('svg').addEventListener('mousedown', e => {
+        console.log('mousedown');
+        const move = e => {
+            console.log('mousemove');
+            document.addEventListener('mouseup', e => {
+                console.log('mouseup');
+                document.removeEventListener('mousemove', move);
+            });
+        };
+        document.addEventListener('mousemove', move);
     });
 })();
