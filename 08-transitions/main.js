@@ -36,34 +36,34 @@ ORDER BY DESC(?superficie)
             });
 
         dataElt.exit()
-            .attr("class", "item exit")
+            .attr('class', 'item exit')
             .transition(t)
-            .style("color", d => {
+            .style('color', d => {
                 console.log('exit');
-                return "red";
+                return 'red';
             })
             .remove();
 
         dataElt
-            .attr("class", d => {
-                console.log('update')
-                return "item update";
+            .attr('class', d => {
+                console.log('update');
+                return 'item update';
             })
             .transition(t)
-            .style("transform", (d, i) => `translate(0, ${i * scale}em)`);
+            .style('transform', (d, i) => `translate(0, ${i * scale}em)`);
 
         dataElt.enter()
             .append('div')
-            .attr("class", "item enter")
+            .attr('class', 'item enter')
             .html(d => {
                 console.log('addingx');
                 return `<span>${d.riverLabel}</span><span>${d.longueur}</span><span>${d.superficie}</span>`;
             })
-            .style("background", d => {
+            .style('background', d => {
                 return color(+d.superficie);
             })
             .transition(t)
-            .style("transform", (d, i) => `translate(0, ${i * scale}em)`);
+            .style('transform', (d, i) => `translate(0, ${i * scale}em)`);
 
     };
 
