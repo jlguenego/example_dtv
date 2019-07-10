@@ -80,13 +80,13 @@
     const euclide = p => p;
     const hyperbolic = p => {
         const d = p.reduce((acc, x) => acc + x ** 2, 0)**0.5;
-        const A = 2.5;
+        const A = 2.9;
         const B = 1;
         const ratio = A/(d**0.95+B);
         return p.map(x => x * A * ratio);
     };
     let trans = hyperbolic;
-    const side = 10;
+    const side = 13;
     draw(side, trans);
 
     document.querySelector('#transition').addEventListener('click', e => {
