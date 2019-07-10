@@ -41,19 +41,8 @@
 
     const margin = ({ top: 0, right: 0, bottom: 0, left: 0 });
 
-    // const t = d3.scaleLinear()
-    //     .domain([0, 7 * n]);
-
-    const x = d3.scaleLinear()
-        .domain([-101, 101])
-        .range([margin.left, width - margin.right]);
-
-    const y = d3.scaleLinear()
-        .domain([-101, 101])
-        .range([height - margin.bottom, margin.top]);
-
-    const fx = t => 30 * (Math.cos((2 * Math.PI / 6) * t) + 2 * Math.floor(t / 7));
-    const fy = t => 30 * Math.sin((2 * Math.PI / 6) * t);
+    const fx = t => Math.cos((2 * Math.PI / 6) * t);
+    const fy = t => Math.sin((2 * Math.PI / 6) * t);
 
     const trans = d => 50 * d / (d + 1);
 
@@ -78,6 +67,13 @@
         .attr('cx', d => d[0])
         .attr('cy', d => d[1])
         .attr('r', 0.1);
+
+    const range = d3.scaleLinear().domain([0, 6]).ticks(7);
+    console.log('range', range);
+
+    const paths = svg.append('g').classed('paths', true).selectAll('path').data(u);
+    paths.enter().append('path')
+        .attr('d', d3.line()(range.map(t => [fx(t), fy(t)])));
 
     // const plots = svg.append('g').classed('plots', true);
     // plots.append('g').call(plot);
