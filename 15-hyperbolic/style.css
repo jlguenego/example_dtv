@@ -16,10 +16,8 @@ h1 {
 
 svg {
     background: #eee;
-    width: 100%;
-    max-width: 30em;
-    height: 20em;
-    cursor: grab;
+    width: 40em;
+    height: 40em;
 }
 
 @media only screen and (max-width: 400px) {

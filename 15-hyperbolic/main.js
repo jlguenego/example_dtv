@@ -1,8 +1,8 @@
 (function () {
     'use strict';
 
-    const width = 20;
-    const height = 20;
+    const width = 40;
+    const height = 40;
     const margin = ({ top: 0, right: 0, bottom: 0, left: 0 });
 
     const x = d3.scaleLinear()
@@ -54,14 +54,22 @@
             .attr('d', d => d3.line()(range.map(t => trans([fx(t) + d[0], fy(t) + d[1]])).map(p => [x(p[0]), y(p[1])])));
     };
 
+    const A = 8.5;
+    const B = 1;
+    const C = 1;
+
     const euclide = p => p;
     const hyperbolic = p => {
         const d = p.reduce((acc, x) => acc + x ** 2, 0) ** 0.5;
-        const A = 2.9;
-        const B = 1;
-        const ratio = A / (d ** 0.95 + B);
-        return p.map(x => x * A * ratio);
+        const D = A / (d ** C + B);
+        return p.map(x => x * D);
     };
+    const hyperbolicInverted = p => {
+        const D = p.reduce((acc, x) => acc + x ** 2, 0) ** 0.5;
+        const d = ((- B) / (D - A));
+        return p.map(x => x * d);
+    };
+
     let trans = hyperbolic;
 
     draw(hive, trans, 0);
@@ -73,25 +81,28 @@
         draw(hive, trans, 1000);
     });
 
-    // d3 zoom
-    d3svg.call(d3.zoom().on('zoom', zoomed));
+    d3svg.on('click', clicked);
 
-    function zoomed(...args) {
-        console.log('zoom', d3.event);
-        if (d3.event.sourceEvent instanceof WheelEvent) {
-            // group.attr('transform', d3.event.transform);
-            return;
+    function clicked(...args) {
+        console.log('clicked', args, d3.event);
+        const svg = document.querySelector('svg');
+        const pt = svg.createSVGPoint();
+        function cursorPoint(evt) {
+            pt.x = evt.clientX; pt.y = evt.clientY;
+            return pt.matrixTransform(svg.getScreenCTM().inverse());
         }
-        const h = hive.map(p => {
-            const result = [
-                p[0] + d3.event.transform.x / 3,
-                p[1] - d3.event.transform.y / 3
-            ];
-            return result;
+        const loc = cursorPoint(d3.event);
+        console.log('loc', loc);
+        const transInverted = (trans === euclide) ? euclide : hyperbolicInverted;
+        const point = transInverted([x.invert(loc.x), y.invert(loc.y)]);
+        console.log('point', point);
+        hive.forEach(p => {
+            p[0] -= point[0];
+            p[1] -= point[1];
         });
-        draw(h, trans, 0);
+        draw(hive, trans, 300);
     }
-    
+
 
 
 })();
