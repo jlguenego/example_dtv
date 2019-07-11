@@ -54,7 +54,7 @@
             .attr('d', d => d3.line()(range.map(t => trans([fx(t) + d[0], fy(t) + d[1]])).map(p => [x(p[0]), y(p[1])])));
     };
 
-    const A = 8.5;
+    const A = 10;
     const B = 1;
     const C = 1;
 
