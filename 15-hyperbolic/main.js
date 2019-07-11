@@ -130,8 +130,6 @@
     }
     function getLoc(selection) {
         const d = d3.touches(selection);
-        console.log('d', d);
-        debug(JSON.stringify(d));
         if (d.length === 1) {
             return { x: d[0][0], y: d[0][1] };
         }
@@ -144,7 +142,6 @@
 
     function zoomed() {
         const loc = getLoc(svg);
-        // debug(JSON.stringify(loc));
         const transInverted = (trans === euclide) ? euclide : hyperbolicInverted;
         const point = transInverted([x.invert(loc.x), y.invert(loc.y)]);
 
@@ -156,28 +153,19 @@
     }
 
     function started() {
-        console.log('this', this);
-        debug('titi');
         const loc = getLoc(svg);
-        // debug(JSON.stringify(loc));
-
         const transInverted = (trans === euclide) ? euclide : hyperbolicInverted;
         startPoint = transInverted([x.invert(loc.x), y.invert(loc.y)]);
-
         startHive = hive;
     }
 
     function ended() {
-
         hive = currentHive;
     }
 
     const dbg = document.querySelector('#debug');
-
     function debug(msg) {
         dbg.innerHTML = msg;
     }
-
-
 
 })();
