@@ -1,0 +1,28 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: sans-serif;
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+}
+
+div.diagram {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+h1 {
+  text-align: center;
+}
+
+.man {
+  color: #0bf;
+}
+
+.woman {
+  color: #f08;
+}
