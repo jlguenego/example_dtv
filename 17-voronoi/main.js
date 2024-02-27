@@ -1,39 +1,6 @@
 // @ts-nocheck
 
 (async () => {
-  const query = `
-  SELECT ?object ?objectLabel ?population ?continentLabel
-WHERE
-{
-        ?object wdt:P31 wd:Q3624078 . 
-        ?object wdt:P1082 ?population .
-        ?object wdt:P30 ?continent.
-
-        SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en" }
-} 
-ORDER BY ?objectLabel 
-`;
-
-  wikidataUrl = "https://query.wikidata.org/bigdata/namespace/wdq/sparql";
-  const url = wikidataUrl + "?query=" + encodeURIComponent(query);
-
-  const response = await fetch(url, {
-    headers: {
-      Accept: "application/sparql-results+json",
-    },
-  });
-  const json = await response.json();
-  const csv = json.results.bindings.map((row) => {
-    const result = {};
-    for (const key of Object.keys(row)) {
-      result[key] = row[key].value;
-    }
-    return result;
-  });
-
-  const population_countries = csv;
-  console.log("population_countries: ", population_countries);
-
   const freedom = await d3.csv(
     "https://gist.githubusercontent.com/will-r-chase/16827fa79e02af9e3a0651fb0d79b426/raw/92b321a8bc4d98e463156ef03a5da5cf05065704/freedom_clean.csv",
     d3.autoType
@@ -60,6 +27,8 @@ ORDER BY ?objectLabel
 
   const width = 750 - margin.left - margin.right;
   const height = 750 - margin.top - margin.bottom;
+
+  const bigFormat = d3.format(",.0f");
 
   const regionColor = function (region) {
     var colors = {
