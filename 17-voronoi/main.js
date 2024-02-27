@@ -9,13 +9,11 @@
   const freedom_year = freedom.filter((obj) => {
     return obj.year === 2008;
   });
-  console.log("freedom_year: ", freedom_year);
 
   const freedom_nest = d3
     .nest()
     .key((d) => d.region_simple)
     .entries(freedom_year);
-  console.log("freedom_nest: ", freedom_nest);
 
   const data_nested = { key: "freedom_nest", values: freedom_nest };
 
