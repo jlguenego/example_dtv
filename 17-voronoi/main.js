@@ -52,7 +52,6 @@
     }
   }
 
-  console.log("d3: ", d3);
   const buildSVG = () => {
     const svg = d3
       .select("div.diagram")
